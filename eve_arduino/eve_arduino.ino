@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include <SPI.h>
 #include "eve/MatrixEve2Conf.h"
-#include "eve/hw_api.h"
-#include "eve/Eve2_81x.h"
 #include "eve/Eve2_81x.c"
 #include "eve/hal.cpp"  
-#include "assets/image_data.h" // Include the generated image data header
+#include "assets/image_data.h" 
+// #include "gen/assets.h" 
+// #include "gen/assets.cpp" 
 
 #include "FS.h"
 #include "LittleFS.h"
@@ -97,6 +97,7 @@ void setup() {
   Serial.printf("Loading image data (%u bytes) to RAM_G...\n", case_181x185_ARGB1555_raw_len);
   WriteBlockRAM(IMAGE_ADDR, case_181x185_ARGB1555_raw, case_181x185_ARGB1555_raw_len);
   Serial.println("Image data loaded to RAM_G");
+  // loadAssetsIntoRAM();
   
   // Display welcome text with image
   displayTextWithImage();
