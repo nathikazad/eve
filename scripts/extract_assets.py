@@ -60,11 +60,12 @@ for image in images:
 
 # Generate the assets.h file
 
-if not os.path.exists('../eve_arduino/gen'):
-    os.makedirs('../eve_arduino/gen')
-with open('../eve_arduino/assets.h', 'w') as file:
-    with open('../scripts/asset_template.h', 'r') as header:
-        file.write(header.read())
+if not os.path.exists('../eve_arduino/assets'):
+    os.makedirs('../eve_arduino/assets')
+with open('../eve_arduino/assets/info.h', 'w') as file:
+    file.write("#ifndef ASSETS_INFO_H\n")
+    file.write("#define ASSETS_INFO_H\n")
+    file.write("#include \"asset.h\"\n")
     file.write('enum Fonts {\n')
     for font in fonts:
         file.write(f'    FONT_{font["name"]},\n')
@@ -81,13 +82,14 @@ with open('../eve_arduino/assets.h', 'w') as file:
 
     file.write('const Image images[] = {\n')
     for image in images:
-        file.write(f'    {{"{image["name"]}", {image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}}, // {image["name"]}\n')
-    file.write('};\n')
+        file.write(f'    {{{image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}}, // {image["name"]}\n')
+    file.write('};\n\n')
+    file.write('void loadAssetsIntoRAM();\n')
+    file.write('#endif\n')
 
 # Generate the assets.cpp file
-with open('../eve_arduino/assets.cpp', 'w') as file:
-    with open('../scripts/asset_template.cpp', 'r') as template:
-        file.write(template.read())
+with open('../eve_arduino/assets/info.cpp', 'w') as file:
+    file.write("#include \"info.h\"\n")
     file.write('\n\nvoid loadAssetsIntoRAM() {\n')
     # for each font open the file using LittleFS and load it using loadImageFromLittleFS(const char* filename, uint32_t ram_g_addr)
     for font in fonts:
