@@ -47,10 +47,18 @@ with open('../editor_files/assets.ese', 'r') as file:
                 print(image['format'])
             images.append(image)
 
+# Copy the fonts and images to the data folder for littleFS
+if not os.path.exists('../eve_arduino/data/fonts'):
+    os.makedirs('../eve_arduino/data/fonts')
+if not os.path.exists('../eve_arduino/data/images'):
+    os.makedirs('../eve_arduino/data/images')
+
 for font in fonts:
-    shutil.copy(f'../editor_files/{font["file"]}', '../eve_arduino/data/')
+    shutil.copy(f'../editor_files/{font["file"]}', '../eve_arduino/data/fonts/')
 for image in images:
-    shutil.copy(f'../editor_files/{image["file"]}', '../eve_arduino/data/')
+    shutil.copy(f'../editor_files/{image["file"]}', '../eve_arduino/data/images/')
+
+# Generate the assets.h file
 
 if not os.path.exists('../eve_arduino/gen'):
     os.makedirs('../eve_arduino/gen')
@@ -68,21 +76,22 @@ with open('../eve_arduino/assets.h', 'w') as file:
 
     file.write('const Font fonts[] = {\n')
     for font in fonts:
-        file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}}},\n')
+        file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}}}, // {font["name"]}\n')
     file.write('};\n\n')
 
     file.write('const Image images[] = {\n')
     for image in images:
-        file.write(f'    {{"{image["name"]}", {image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}},\n')
+        file.write(f'    {{"{image["name"]}", {image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}}, // {image["name"]}\n')
     file.write('};\n')
 
+# Generate the assets.cpp file
 with open('../eve_arduino/assets.cpp', 'w') as file:
     with open('../scripts/asset_template.cpp', 'r') as template:
         file.write(template.read())
     file.write('\n\nvoid loadAssetsIntoRAM() {\n')
     # for each font open the file using LittleFS and load it using loadImageFromLittleFS(const char* filename, uint32_t ram_g_addr)
     for font in fonts:
-        file.write(f'    loadAssetFromLittleFS("{font["file"]}", {font["memoryAddress"]});\n')
+        file.write(f'    loadAssetFromLittleFS("/{font["file"]}", {font["memoryAddress"]});\n')
     for image in images:
-        file.write(f'    loadAssetFromLittleFS("{image["file"]}", {image["memoryAddress"]});\n')
+        file.write(f'    loadAssetFromLittleFS("/{image["file"]}", {image["memoryAddress"]});\n')
     file.write('}\n')
