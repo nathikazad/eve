@@ -37,13 +37,13 @@ void display_main_screen(Color color, float temperature, float dew_point, int hu
   display_text(FONT_75W_39PX_A, state_text, 328, 119, COLOR_WHITE);
   
   // Start Button
-  display_image(images[IMAGE_BTN_START], 419, 20);
+  display_image(IMAGE_BTN_START, 419, 20);
   
   // Settings Button
-  display_image(images[IMAGE_GEARS], 435, 229);
+  display_image(IMAGE_GEARS, 435, 229);
   
   // Cool Cure Logo
-  display_image(images[IMAGE_COOLCUREBOTTOM], 234, 238);
+  display_image(IMAGE_COOLCUREBOTTOM, 234, 238);
   
   flush_screen_commands();
 }

@@ -130,7 +130,8 @@ void flush_screen_commands() {
   Wait4CoProFIFOEmpty();
 }
 
-void display_image(Image image, int x, int y) {
+void display_image(int image_index, int x, int y) {
+  Image image = images[image_index];
   uint16_t format_value = ARGB1555;
   if (image.format == IMAGE_FORMAT_PALETTED4444) {
     format_value = PALETTED4444;

@@ -50,10 +50,9 @@ extern const Image images[];
 
 bool init_eve();
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr);
-void display_store_screen();
 void clear_screen(Color color);
 void flush_screen_commands();
-void display_image(Image image, int x, int y);
+void display_image(int image_index, int x, int y);
 void display_text(int font_index, const char* text, int x, int y, Color color);
 void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
 #endif
