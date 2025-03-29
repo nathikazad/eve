@@ -77,6 +77,12 @@ with open('../eve_arduino/assets/info.h', 'w') as file:
         file.write(f'    IMAGE_{image["name"]},\n')
     file.write('};\n\n')
 
+    file.write('void load_assets();\n')
+    file.write('#endif\n')
+
+# Generate the assets.cpp file
+with open('../eve_arduino/assets/info.cpp', 'w') as file:
+    file.write("#include \"info.h\"\n")
     file.write('const Font fonts[] = {\n')
     for font in fonts:
         file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}, {font["startChar"]}}}, // {font["name"]}\n')
@@ -86,12 +92,6 @@ with open('../eve_arduino/assets/info.h', 'w') as file:
     for image in images:
         file.write(f'    {{{image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}}, // {image["name"]}\n')
     file.write('};\n\n')
-    file.write('void load_assets();\n')
-    file.write('#endif\n')
-
-# Generate the assets.cpp file
-with open('../eve_arduino/assets/info.cpp', 'w') as file:
-    file.write("#include \"info.h\"\n")
     file.write('\n\nvoid load_assets() {\n')
     # for each font open the file using LittleFS and load it using loadImageFromLittleFS(const char* filename, uint32_t ram_g_addr)
     for font in fonts:

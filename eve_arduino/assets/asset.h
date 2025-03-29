@@ -1,10 +1,7 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-
-// Buffer for reading the file in chunks
-const size_t bufferSize = 1024; 
-uint8_t buffer[bufferSize];
+#include <Arduino.h> 
 
 enum Color {
     COLOR_WHITE,

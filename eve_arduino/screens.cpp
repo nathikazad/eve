@@ -1,6 +1,4 @@
-#include "asset.h"
-#include "info.h"
-#include <stdio.h>
+#include "screens.h"
 
 void display_main_screen(Color color, float temperature, float dew_point, int humidity, char* state_text) {
   clear_screen(color);

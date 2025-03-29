@@ -28,6 +28,10 @@ bool init_eve() {
 }
 
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
+
+  // Buffer for reading the file in chunks
+  const size_t bufferSize = 1024; 
+  uint8_t buffer[bufferSize];
   Serial.printf("Loading image file: %s to RAM_G address: %u\n", filename, ram_g_addr);
   
   if (!LittleFS.exists(filename)) {

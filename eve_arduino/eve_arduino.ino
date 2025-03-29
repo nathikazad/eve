@@ -5,7 +5,7 @@
 #include "eve/hal.cpp"  
 #include "assets/asset.cpp"
 #include "assets/info.cpp" 
-#include "assets/screens.cpp"
+#include "screens.h"
 
 #include "FS.h"
 #include "LittleFS.h"
