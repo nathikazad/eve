@@ -5,6 +5,7 @@
 #include "eve/hal.cpp"  
 #include "assets/asset.cpp"
 #include "assets/info.cpp" 
+#include "assets/screens.cpp"
 
 #include "FS.h"
 #include "LittleFS.h"
@@ -26,10 +27,12 @@ void setup() {
     Serial.println("LittleFS mount failed");
     return;
   }
-  initEve();
-  loadAssetsIntoRAM();  
-  // Display welcome text with image
-  displayTextWithImage();
+  init_eve();
+  int asset_load_start = millis();
+  load_assets();  
+  int asset_load_end = millis();
+  Serial.printf("Asset load time: %d ms\n", asset_load_end - asset_load_start);
+  display_store_screen();
 }
 
 void loop() {

@@ -1,1 +1,12 @@
-{"name": "Gears", "type": "bitmap", "format": "ARGB1555", "width": 40, "height": 41, "compressed": 1}
+{
+  "eab version": "2.12.0",
+  "input name": "Gears.png",
+  "output name": "Gears.raw",
+  "output size": 3280,
+  "type": "bitmap",
+  "format": "ARGB1555",
+  "compressed": "no",
+  "width": 40,
+  "height": 41,
+  "stride": 80
+}

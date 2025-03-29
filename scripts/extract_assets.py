@@ -19,19 +19,21 @@ with open('../editor_files/assets.ese', 'r') as file:
         if content['converter'] == 'Font':
             name = content['displayName']
             name = name.split(".")[0].upper()
-            name = "_".join(name.split("_")[:4])
+            fontType = fontTypes[name.split("_")[2]]
+            name = "_".join(name.split("_")[:3])
             fileName = content['destName']+'.raw'
             size = os.path.getsize(f'../editor_files/{fileName}')
-            fontType = fontTypes[name.split("_")[2]]
+            
             fonts.append({'name': name, 
                           'file': fileName, 
                           'type': fontType,
                           'memoryAddress': content['memoryAddress'],
+                          'startChar': content['fontOffset'],
                           'size': size})
         elif content['converter'] == 'Image':
             name = content['displayName']
             name = name.split(".")[0].upper()
-            name = "_".join(name.split("_")[:4])
+            # name = "_".join(name.split("_")[:4])
             fileName = content['destName']+'.raw'
             size = os.path.getsize(f'../editor_files/{fileName}')
             image = {'name': name, 
@@ -77,23 +79,23 @@ with open('../eve_arduino/assets/info.h', 'w') as file:
 
     file.write('const Font fonts[] = {\n')
     for font in fonts:
-        file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}}}, // {font["name"]}\n')
+        file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}, {font["startChar"]}}}, // {font["name"]}\n')
     file.write('};\n\n')
 
     file.write('const Image images[] = {\n')
     for image in images:
         file.write(f'    {{{image["memoryAddress"]}, {image["size"]}, {image["width"]}, {image["height"]}, IMAGE_FORMAT_{image["format"]}}}, // {image["name"]}\n')
     file.write('};\n\n')
-    file.write('void loadAssetsIntoRAM();\n')
+    file.write('void load_assets();\n')
     file.write('#endif\n')
 
 # Generate the assets.cpp file
 with open('../eve_arduino/assets/info.cpp', 'w') as file:
     file.write("#include \"info.h\"\n")
-    file.write('\n\nvoid loadAssetsIntoRAM() {\n')
+    file.write('\n\nvoid load_assets() {\n')
     # for each font open the file using LittleFS and load it using loadImageFromLittleFS(const char* filename, uint32_t ram_g_addr)
     for font in fonts:
-        file.write(f'    loadAssetFromLittleFS("/{font["file"]}", {font["memoryAddress"]});\n')
+        file.write(f'    load_asset_from_littlefs("/{font["file"]}", {font["memoryAddress"]});\n')
     for image in images:
-        file.write(f'    loadAssetFromLittleFS("/{image["file"]}", {image["memoryAddress"]});\n')
+        file.write(f'    load_asset_from_littlefs("/{image["file"]}", {image["memoryAddress"]});\n')
     file.write('}\n')
