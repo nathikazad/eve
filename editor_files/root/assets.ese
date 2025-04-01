@@ -316,7 +316,8 @@
         "CMD_TEXT(116, 50, 10, 0, \".0\")",
         "CMD_SETFONT2(8, 41040, 70)",
         "CMD_TEXT(158, 50, 8, 0, \"F\")",
-        "CMD_TEXT(32, 91, 28, 0, \"Temperature\")",
+        "CMD_SETFONT2(15, 10656, 65)",
+        "CMD_TEXT(32, 91, 28, 15, \"Temperature\")",
         "",
         "",
         "COLOR_RGB(255, 255, 255)",
@@ -325,7 +326,8 @@
         "COLOR_RGB(0, 0, 0)",
         "CMD_TEXT(116, 160, 10, 0, \".0\")",
         "CMD_TEXT(158, 160, 8, 0, \"F\")",
-        "CMD_TEXT(32, 206, 28, 0, \"Dew Point\")",
+        "CMD_TEXT(32, 206, 28, 0, \"Dew\")",
+        "CMD_TEXT(79, 206, 28, 0, \"Point\")",
         "",
         "CMD_SETFONT2(3, 29196, 37)",
         "CMD_TEXT(32, 239, 3, 0, \"57%\")",
@@ -374,6 +376,9 @@
             "NOP()"
         ],
         "rotate": 0,
+        "sc0_ptr0": "",
+        "sc0_ptr1": "",
+        "scanoutFormat": "RGB6",
         "vSize": 272
     }
 }
