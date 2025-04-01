@@ -1,0 +1,8 @@
+{
+    "converter": "Font",
+    "fontCharSet": "./0123456789",
+    "fontOffset": 46,
+    "fontSize": 40,
+    "imageFormat": 1,
+    "sourcePath": "resources/65w_40px_N_46_1.otf"
+}

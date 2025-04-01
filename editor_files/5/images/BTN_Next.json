@@ -1,0 +1,12 @@
+{
+  "eab version": "2.12.0",
+  "input name": "BTN_Next.png",
+  "output name": "BTN_Next.raw",
+  "output size": 450,
+  "type": "bitmap",
+  "format": "ARGB1555",
+  "compressed": "no",
+  "width": 15,
+  "height": 15,
+  "stride": 30
+}

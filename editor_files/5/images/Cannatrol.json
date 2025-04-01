@@ -1,0 +1,12 @@
+{
+  "eab version": "2.12.0",
+  "input name": "Cannatrol.png",
+  "output name": "Cannatrol.raw",
+  "output size": 1650,
+  "type": "bitmap",
+  "format": "L1",
+  "compressed": "no",
+  "width": 240,
+  "height": 55,
+  "stride": 30
+}

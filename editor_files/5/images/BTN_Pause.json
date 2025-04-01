@@ -1,0 +1,12 @@
+{
+  "eab version": "2.12.0",
+  "input name": "BTN_Pause.png",
+  "output name": "BTN_Pause.raw",
+  "output size": 4232,
+  "type": "bitmap",
+  "format": "ARGB1555",
+  "compressed": "no",
+  "width": 46,
+  "height": 46,
+  "stride": 92
+}

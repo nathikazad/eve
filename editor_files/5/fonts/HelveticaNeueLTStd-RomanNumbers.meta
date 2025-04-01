@@ -1,0 +1,8 @@
+{
+    "converter": "Font",
+    "fontCharSet": "0123456789",
+    "fontOffset": 48,
+    "fontSize": 84,
+    "imageFormat": 1,
+    "sourcePath": "resources/HelveticaNeueLTStd-RomanNumbers.otf"
+}
