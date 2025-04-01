@@ -10,8 +10,8 @@ Font Weight Options:
 
 Character Range Options:
 - numeric (N): Characters from . to 9
-- alpha (A): Characters from A to z
-- alphanumeric (AN): Characters from % to z
+- alpha (A): Characters from A to z (and space)
+- alphanumeric (AN): Characters from % to z (and space)
 - f (F): Characters from f to f
 
 Example:
@@ -31,16 +31,21 @@ def get_range_details(char_range):
         char_range (str): The character range (numeric, alpha, or alphanumeric)
     
     Returns:
-        tuple: (start_char, end_char, range_code)
+        tuple: (start_char, end_char, range_code, include_space)
     """
+    # Add a flag to indicate whether space should be included
+    include_space = False
+    
     if char_range.lower() == "numeric" or char_range.lower() == "n":
-        return '.', '9', 'N'
+        return '.', '9', 'N', include_space
     elif char_range.lower() == "alpha" or char_range.lower() == "a":
-        return 'A', 'z', 'A'
+        include_space = True
+        return 'A', 'z', 'A', include_space
     elif char_range.lower() == "alphanumeric" or char_range.lower() == "an":
-        return '%', 'z', 'AN'
-    elif char_range.lower() == "only F" or char_range.lower() == "f":
-        return 'F', 'F', 'F'
+        include_space = True
+        return '%', 'z', 'AN', include_space
+    elif char_range.lower() == "only f" or char_range.lower() == "f":
+        return 'F', 'F', 'F', include_space
     else:
         raise ValueError("Invalid character range. Choose 'numeric', 'alpha', or 'alphanumeric'.")
 
@@ -58,13 +63,16 @@ def subset_font(font_weight, font_size, char_range):
     """
     try:
         # Get the range details
-        start_char, end_char, range_code = get_range_details(char_range)
+        start_char, end_char, range_code, include_space = get_range_details(char_range)
         start_unicode = ord(start_char)
         end_unicode = ord(end_char)
         
         # Build the input and output file paths
         input_file = f"../resources/fonts_original/{font_weight}.otf"
         output_file = f"../resources/fonts_generated/{font_weight}w_{font_size}px_{range_code}_{start_unicode}.otf"
+
+        if include_space:
+            output_file = f"../resources/fonts_generated/{font_weight}w_{font_size}px_{range_code}_32.otf"
         
         # Ensure the directory exists
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -74,6 +82,10 @@ def subset_font(font_weight, font_size, char_range):
         
         # Create a list of Unicode codepoints to keep
         unicodes = list(range(start_unicode, end_unicode + 1))
+        
+        # Add space character if needed
+        if include_space:
+            unicodes.append(32)  # 32 is the Unicode value for space
         
         # Create a subsetter
         options = Options()
@@ -95,9 +107,15 @@ def subset_font(font_weight, font_size, char_range):
         # Save the subsetted font
         font.save(output_file)
         
+        # Prepare a readable output message
+        char_range_desc = f"'{start_char}' to '{end_char}'"
+        if include_space:
+            char_range_desc += " (including space)"
+        
         print(f"Subset font created successfully: {output_file}")
-        print(f"Font reduced to '{char_range}' range: '{start_char}' to '{end_char}'")
-        print(f"(Unicode range: {start_unicode} to {end_unicode})")
+        print(f"Font reduced to '{char_range}' range: {char_range_desc}")
+        print(f"(Unicode range: {start_unicode} to {end_unicode}" + 
+              (", plus space (32)" if include_space else "") + ")")
         return True
         
     except Exception as e:
