@@ -1,8 +1,0 @@
-{
-    "converter": "Font",
-    "fontCharSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz",
-    "fontOffset": 65,
-    "fontSize": 12,
-    "imageFormat": 1,
-    "sourcePath": "resources/55w_12px_A.otf"
-}

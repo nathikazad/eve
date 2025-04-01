@@ -1,0 +1,12 @@
+{
+  "eab version": "2.12.0",
+  "input name": "BTN_SM_Next_onmdpi.png",
+  "output name": "BTN_SM_Next_onmdpi.raw",
+  "output size": 800,
+  "type": "bitmap",
+  "format": "ARGB1555",
+  "compressed": "no",
+  "width": 20,
+  "height": 20,
+  "stride": 40
+}
