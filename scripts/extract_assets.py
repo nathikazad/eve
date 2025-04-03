@@ -12,7 +12,7 @@ fontTypes = {
     "F": "ONLY_F"
 }
 
-with open('../editor_files/assets.ese', 'r') as file:
+with open('../editor_files/assets/assets.ese', 'r') as file:
     assets = json.load(file)
     contents = assets['content']
     for content in contents:
@@ -22,7 +22,7 @@ with open('../editor_files/assets.ese', 'r') as file:
             fontType = fontTypes[name.split("_")[2]]
             name = "_".join(name.split("_")[:3])
             fileName = content['destName']+'.raw'
-            size = os.path.getsize(f'../editor_files/{fileName}')
+            size = os.path.getsize(f'../editor_files/assets/{fileName}')
             
             fonts.append({'name': name, 
                           'file': fileName, 
@@ -35,13 +35,13 @@ with open('../editor_files/assets.ese', 'r') as file:
             name = name.split(".")[0].upper()
             # name = "_".join(name.split("_")[:4])
             fileName = content['destName']+'.raw'
-            size = os.path.getsize(f'../editor_files/{fileName}')
+            size = os.path.getsize(f'../editor_files/assets/{fileName}')
             image = {'name': name, 
                     'file': fileName,
                     'memoryAddress': content['memoryAddress'],
                     'size': size}
             # print contents of file
-            with open(f'../editor_files/{content['destName']+'.json'}', 'r') as file:
+            with open(f'../editor_files/assets/{content['destName']+'.json'}', 'r') as file:
                 meta = json.load(file)
                 image['width'] = meta['width']
                 image['height'] = meta['height']
@@ -56,9 +56,9 @@ if not os.path.exists('../eve_arduino/data/images'):
     os.makedirs('../eve_arduino/data/images')
 
 for font in fonts:
-    shutil.copy(f'../editor_files/{font["file"]}', '../eve_arduino/data/fonts/')
+    shutil.copy(f'../editor_files/assets/{font["file"]}', '../eve_arduino/data/fonts/')
 for image in images:
-    shutil.copy(f'../editor_files/{image["file"]}', '../eve_arduino/data/images/')
+    shutil.copy(f'../editor_files/assets/{image["file"]}', '../eve_arduino/data/images/')
 
 # Generate the assets.h file
 

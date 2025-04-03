@@ -7,6 +7,10 @@ enum Color {
     COLOR_WHITE,
     COLOR_BLACK,
     COLOR_GREEN,
+    COLOR_PURPLE,
+    COLOR_BLUE,
+    COLOR_YELLOW,
+    COLOR_GRAY
 };
 
 enum FontType {
@@ -55,4 +59,7 @@ void flush_screen_commands();
 void display_image(int image_index, int x, int y);
 void display_text(int font_index, const char* text, int x, int y, Color color);
 void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
+void display_slider(int x, int y, int width, int height, int value, int range);
+void set_color(Color color);
+void drawRectangle(int x, int y, int width, int height, Color color);
 #endif
