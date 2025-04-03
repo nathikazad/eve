@@ -1,8 +1,8 @@
 #ifndef SCREENS_H
 #define SCREENS_H
 
-#include "eve.h"
-#include "assets.h"
+#include "eve/eve.h"
+#include "eve/assets.h"
 
 extern int current_screen;
 

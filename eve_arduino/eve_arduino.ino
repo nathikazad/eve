@@ -2,6 +2,7 @@
 #include "Arduino.h"
 #include "eve/init.cpp"
 #include "LittleFS.h"
+#include "screens.h"
 
 #define EveChipSelect_PIN     D7  // PB1
 #define EveAudioEnable_PIN    D1  // PD1
@@ -11,6 +12,19 @@
 #define SCK D8
 #define MISO D9
 #define MOSI D10
+
+void handleTouch(int16_t x, int16_t y) {
+  // You can use the x,y coordinates to determine what to do
+  
+  // Increment current_screen
+  current_screen++;
+  if (current_screen > 6) {
+    current_screen = 0;
+  }
+  
+  // Display the new screen
+  display_current_screen();
+}
 
 void setup() {
   // Initialize serial for debugging
@@ -24,7 +38,7 @@ void setup() {
     Serial.println("LittleFS mount failed");
     return;
   }
-  init_eve(EvePDN_PIN, EveChipSelect_PIN, SCK, MISO, MOSI, EveAudioEnable_PIN, EveInterrupt_PIN);
+  init_eve(EvePDN_PIN, EveChipSelect_PIN, SCK, MISO, MOSI, EveAudioEnable_PIN, EveInterrupt_PIN, handleTouch);
 }
 
 void loop() {

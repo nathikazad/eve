@@ -9,11 +9,10 @@
 #include "driver/hal.cpp"  
 #include "eve.h"
 #include "assets.cpp"
-#include "screens.cpp"
 #include "widgets.cpp"
 #include "touch.cpp"
 
-bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin) {
+bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin, TouchCallback touch_callback) {
   pinMode(pd_pin, OUTPUT);
   digitalWrite(pd_pin, LOW);           // Reset condition
   delay(100);
@@ -38,7 +37,7 @@ bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, i
   load_assets();  
   int asset_load_end = millis();
   Serial.printf("Asset load time: %d ms\n", asset_load_end - asset_load_start);
-  init_touch_interrupts(interrupt_pin);
+  init_touch_interrupts(interrupt_pin, touch_callback);
   
   Serial.println("Display initialized with touch interrupts configured");
   display_current_screen();

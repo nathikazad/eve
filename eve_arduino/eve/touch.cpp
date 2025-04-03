@@ -1,12 +1,11 @@
 #include "eve.h"
-#include "screens.h"
 
 int16_t last_touch_x = -32768;
 int16_t last_touch_y = -32768;
 TaskHandle_t touchTaskHandle = NULL;
 bool handling_touch = false;
+TouchCallback touch_callback = NULL; 
 
-// Modified interrupt handler
 void IRAM_ATTR handle_touch_interrupt() {
   if (handling_touch) {
     return;
@@ -25,7 +24,9 @@ void IRAM_ATTR handle_touch_interrupt() {
   }
 }
 
-bool init_touch_interrupts(int interrupt_pin) {
+bool init_touch_interrupts(int interrupt_pin, TouchCallback callback) {
+  // Store the callback function
+  touch_callback = callback;
 
   // 1. Enable the TOUCH interrupt flag in the mask// Configure touch mode to ensure touch is active
   wr8(RAM_REG + REG_TOUCH_MODE, 3); // Continuous mode
@@ -53,14 +54,15 @@ bool init_touch_interrupts(int interrupt_pin) {
   Serial.print("Attached EVE interrupt to pin ");
   Serial.println(interrupt_pin);
 
-    // Create touch handling task
-  xTaskCreate(
+  // Create touch handling task
+  xTaskCreatePinnedToCore(
     touchHandlerTask,    // Task function
     "TouchHandler",      // Name for debugging
-    2048*2,                // Stack size (adjust as needed)
+    2048*2,              // Stack size (adjust as needed)
     NULL,                // Parameters
     1,                   // Priority
-    &touchTaskHandle     // Task handle
+    &touchTaskHandle,    // Task handle
+    1                    // Run on Core 1 (Application core)
   );
   
   return true;
@@ -79,14 +81,10 @@ void touchHandlerTask(void* parameter) {
       // Read touch coordinates and update last_touch_x/y
       read_touch_coordinates();
       
-      // Advance to next screen
-      current_screen++;
-      if (current_screen > 6) {
-        current_screen = 0;
+      // Call the callback function with touch coordinates if it exists
+      if (touch_callback != NULL) {
+        touch_callback(last_touch_x, last_touch_y);
       }
-      
-      // Display the new screen
-      display_current_screen();
     }
     handling_touch = false;
   }

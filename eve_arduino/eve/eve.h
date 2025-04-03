@@ -49,6 +49,9 @@ public:
         memoryAddress(address), size(sz), width(w), height(h), format(fmt) {}
 };
 
+// Function pointer type for touch callback
+typedef void (*TouchCallback)(int16_t x, int16_t y);
+
 extern const Font fonts[];
 extern const Image images[];
 extern volatile bool touch_interrupt;
