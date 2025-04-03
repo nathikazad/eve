@@ -4,17 +4,34 @@
 #include "../config.h"
 #include "../eve/Eve2_81x.h"
 #include "asset.h"
+#include "../screens.h"
 #include "FS.h"
 #include "LittleFS.h"
-
+#include <FreeRTOS.h>
 // Touch interrupt flag
-volatile bool touch_interrupt = false;
 int16_t last_touch_x = -32768;
 int16_t last_touch_y = -32768;
+TaskHandle_t touchTaskHandle = NULL;
+int current_screen = 0;
+bool handling_touch = false;
 
-// Interrupt handler function
+// Modified interrupt handler
 void IRAM_ATTR handle_touch_interrupt() {
-  touch_interrupt = true;
+  if (handling_touch) {
+    return;
+  }
+  handling_touch = true;
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+  
+  // Notify the touch handling task
+  if (touchTaskHandle != NULL) {
+    vTaskNotifyGiveFromISR(touchTaskHandle, &xHigherPriorityTaskWoken);
+  }
+  
+  // If a higher priority task was woken, request a context switch
+  if (xHigherPriorityTaskWoken == pdTRUE) {
+    portYIELD_FROM_ISR();
+  }
 }
 
 bool init_eve() {
@@ -36,10 +53,15 @@ bool init_eve() {
   // Initialize EVE display
   FT81x_Init(DISPLAY_43, BOARD_EVE2, TOUCH_TPR);
 
+  int asset_load_start = millis();
+  load_assets();  
+  int asset_load_end = millis();
+  Serial.printf("Asset load time: %d ms\n", asset_load_end - asset_load_start);
   // Configure touch interrupts
   init_eve_interrupts();
   
   Serial.println("Display initialized with touch interrupts configured");
+  display_current_screen();
   return true;
 }
 
@@ -70,16 +92,85 @@ bool init_eve_interrupts() {
   attachInterrupt(digitalPinToInterrupt(EveInterrupt_PIN), handle_touch_interrupt, CHANGE);
   Serial.print("Attached EVE interrupt to pin ");
   Serial.println(EveInterrupt_PIN);
+
+    // Create touch handling task
+  xTaskCreate(
+    touchHandlerTask,    // Task function
+    "TouchHandler",      // Name for debugging
+    2048*2,                // Stack size (adjust as needed)
+    NULL,                // Parameters
+    1,                   // Priority
+    &touchTaskHandle     // Task handle
+  );
   
   return true;
+}
+
+void touchHandlerTask(void* parameter) {
+  for (;;) {
+    // Wait for notification from ISR
+    uint32_t notification = ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    
+    if (notification > 0) {
+      // Read and clear interrupt flags
+      uint8_t flags = rd8(RAM_REG + REG_INT_FLAGS);
+      Serial.printf("Touch interrupt detected! Flags: 0x%02X\n", flags);
+      
+      // Read touch coordinates and update last_touch_x/y
+      read_touch_coordinates();
+      
+      // Advance to next screen
+      current_screen++;
+      if (current_screen > 6) {
+        current_screen = 0;
+      }
+      
+      // Display the new screen
+      display_current_screen();
+    }
+    handling_touch = false;
+  }
+}
+
+void display_current_screen() {
+  switch (current_screen) {
+    case 0:
+      Serial.println("Displaying splash screen");
+      display_splash_screen();
+      break;
+    case 1:
+      Serial.println("Displaying store screen");
+      display_main_screen(68.0, 54.0, 57, "STORE");
+      break;
+    case 2:
+      Serial.println("Displaying dry screen");
+      display_main_screen(68.0, 54.0, 57, "DRY");
+      break;
+    case 3:
+      Serial.println("Displaying cure screen");
+      display_main_screen(68.0, 54.0, 57, "CURE");
+      break;
+    case 4:
+      Serial.println("Displaying store sliders");
+      display_sliders("STORE");
+      break;
+    case 5:
+      Serial.println("Displaying dry sliders");
+      display_sliders("DRY");
+      break;
+    case 6:
+      Serial.println("Displaying cure sliders");
+      display_sliders("CURE");  
+      break;
+  }
 }
 
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
 
   // Buffer for reading the file in chunks
-  const size_t bufferSize = 1024; 
+  const size_t bufferSize = 1024*5; 
   uint8_t buffer[bufferSize];
-  Serial.printf("Loading image file: %s to RAM_G address: %u\n", filename, ram_g_addr);
+  Serial.printf("File: %s, Address: %u, ", filename, ram_g_addr);
   
   if (!LittleFS.exists(filename)) {
     Serial.printf("Error: File %s does not exist\n", filename);
@@ -93,7 +184,7 @@ bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
   }
   
   size_t fileSize = file.size();
-  Serial.printf("File size: %u bytes\n", fileSize);
+  Serial.printf("Size: %u bytes, ", fileSize);
 
   
   size_t bytesRead = 0;
@@ -115,7 +206,7 @@ bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
       buffer[145] = (full_addr >> 8) & 0xFF;   
       buffer[146] = (full_addr >> 16) & 0xFF;  
       buffer[147] = (full_addr >> 24) & 0xFF;  
-      Serial.printf("Font address %d set to %d\n", 144, ram_g_addr+148);
+      // Serial.printf("Font address %d set to %d\n", 144, ram_g_addr+148);
     }
     
     // Write this chunk to EVE RAM_G
@@ -125,15 +216,15 @@ bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
     bytesRead += chunkSize;
     currentAddr += chunkSize;
     
-    // Optional: Print progress
-    Serial.printf("Loading progress: %u/%u bytes (%d%%)\n", 
-                 bytesRead, fileSize, (bytesRead * 100) / fileSize);
+    // // Optional: Print progress
+    // Serial.printf("Loading progress: %u/%u bytes (%d%%)\n", 
+    //              bytesRead, fileSize, (bytesRead * 100) / fileSize);
   }
   
   file.close();
   
   if (bytesRead == fileSize) {
-    Serial.println("Image loaded successfully");
+    Serial.println("Success");
     return true;
   } else {
     Serial.printf("Error: Only read %u of %u bytes\n", bytesRead, fileSize);

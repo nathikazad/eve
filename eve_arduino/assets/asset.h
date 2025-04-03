@@ -54,6 +54,7 @@ extern const Image images[];
 extern volatile bool touch_interrupt;
 extern int16_t last_touch_x;
 extern int16_t last_touch_y;
+extern TaskHandle_t touchTaskHandle;
 
 
 bool init_eve();
@@ -68,4 +69,6 @@ void set_color(Color color);
 void drawRectangle(int x, int y, int width, int height, Color color);
 bool init_eve_interrupts();
 void read_touch_coordinates();
+void touchHandlerTask(void* parameter);
+void display_current_screen();
 #endif
