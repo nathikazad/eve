@@ -1,6 +1,6 @@
-#ifndef ASSETS_INFO_H
-#define ASSETS_INFO_H
-#include "asset.h"
+#ifndef ASSETS_H
+#define ASSETS_H
+#include "eve.h"
 enum Fonts {
     FONT_55W_12PX_A,
     FONT_55W_16PX_AN,

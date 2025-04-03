@@ -1,14 +1,6 @@
 // eve_arduino.ino
 #include "Arduino.h"
-#include <SPI.h>
-#include "eve/MatrixEve2Conf.h"
-#include "eve/Eve2_81x.c"
-#include "eve/hal.cpp"  
-#include "assets/asset.cpp"
-#include "assets/info.cpp" 
-#include "screens.h"
-
-#include "FS.h"
+#include "eve/init.cpp"
 #include "LittleFS.h"
 
 

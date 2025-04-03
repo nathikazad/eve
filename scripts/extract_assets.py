@@ -62,12 +62,12 @@ for image in images:
 
 # Generate the assets.h file
 
-if not os.path.exists('../eve_arduino/assets'):
-    os.makedirs('../eve_arduino/assets')
-with open('../eve_arduino/assets/info.h', 'w') as file:
-    file.write("#ifndef ASSETS_INFO_H\n")
-    file.write("#define ASSETS_INFO_H\n")
-    file.write("#include \"asset.h\"\n")
+if not os.path.exists('../eve_arduino/eve'):
+    os.makedirs('../eve_arduino/eve')
+with open('../eve_arduino/eve/assets.h', 'w') as file:
+    file.write("#ifndef ASSETS_H\n")
+    file.write("#define ASSETS_H\n")
+    file.write("#include \"eve.h\"\n")
     file.write('enum Fonts {\n')
     for font in fonts:
         file.write(f'    FONT_{font["name"]},\n')
@@ -81,8 +81,8 @@ with open('../eve_arduino/assets/info.h', 'w') as file:
     file.write('#endif\n')
 
 # Generate the assets.cpp file
-with open('../eve_arduino/assets/info.cpp', 'w') as file:
-    file.write("#include \"info.h\"\n")
+with open('../eve_arduino/eve/assets.cpp', 'w') as file:
+    file.write("#include \"assets.h\"\n")
     file.write('const Font fonts[] = {\n')
     for font in fonts:
         file.write(f'    {{{font["memoryAddress"]}, {font["size"]}, FONT_TYPE_{font["type"]}, {font["startChar"]}}}, // {font["name"]}\n')

@@ -1,5 +1,5 @@
-#ifndef ASSET_H
-#define ASSET_H
+#ifndef EVE_H
+#define EVE_H
 
 #include <Arduino.h> 
 
@@ -67,7 +67,7 @@ void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
 void display_slider(int x, int y, int width, int height, int value, int range);
 void set_color(Color color);
 void drawRectangle(int x, int y, int width, int height, Color color);
-bool init_eve_interrupts();
+bool init_touch_interrupts();
 void read_touch_coordinates();
 void touchHandlerTask(void* parameter);
 void display_current_screen();

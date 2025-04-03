@@ -1,4 +1,4 @@
-#include "info.h"
+#include "assets.h"
 const Font fonts[] = {
     {0, 3628, FONT_TYPE_ALPHABETS, 65}, // 55W_12PX_A
     {3628, 7028, FONT_TYPE_ALPHA_NUMERIC, 37}, // 55W_16PX_AN

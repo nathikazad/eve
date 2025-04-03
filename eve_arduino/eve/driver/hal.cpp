@@ -5,8 +5,27 @@
 
 #include "hw_api.h"
 #include "Arduino.h"
-#include "../config.h"
+
 #define SPI_SPEED 20000000  // 20 MHz (20,000,000 Hz)
+
+// Global variables to store pin assignments
+static uint8_t _eveChipSelectPin = 0;
+static uint8_t _evePdnPin = 0;
+
+// Initialization function to set pin assignments
+void HAL_Eve_Init(uint8_t chipSelectPin, uint8_t pdnPin)
+{
+  _eveChipSelectPin = chipSelectPin;
+  _evePdnPin = pdnPin;
+  
+  // Configure pins
+  pinMode(_eveChipSelectPin, OUTPUT);
+  pinMode(_evePdnPin, OUTPUT);
+  
+  // Initialize default states
+  digitalWrite(_eveChipSelectPin, HIGH);
+  digitalWrite(_evePdnPin, HIGH);
+}
 
 void HAL_Delay(uint32_t milliSeconds)
 {
@@ -16,11 +35,11 @@ void HAL_Delay(uint32_t milliSeconds)
 uint8_t HAL_SPI_WriteByte(uint8_t data)
 {
   SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE0));
-  digitalWrite(EveChipSelect_PIN, LOW);
+  digitalWrite(_eveChipSelectPin, LOW);
 
   SPI.transfer(data);
       
-  digitalWrite(EveChipSelect_PIN, HIGH);
+  digitalWrite(_eveChipSelectPin, HIGH);
   SPI.endTransaction();
   return 0;
 }
@@ -29,11 +48,11 @@ uint8_t HAL_SPI_WriteByte(uint8_t data)
 void HAL_SPI_WriteBuffer(uint8_t *Buffer, uint32_t Length)
 {
   SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE0));
-  digitalWrite(EveChipSelect_PIN, LOW);
+  digitalWrite(_eveChipSelectPin, LOW);
 
   SPI.transfer(Buffer, Length);
       
-  digitalWrite(EveChipSelect_PIN, HIGH);
+  digitalWrite(_eveChipSelectPin, HIGH);
   SPI.endTransaction();
 }
 
@@ -57,26 +76,25 @@ void HAL_SPI_ReadBuffer(uint8_t *Buffer, uint32_t Length)
 }
 
 // Enable SPI by activating chip select line
-
-
 void HAL_SPI_Enable(void)
 {
   SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE0));
-  digitalWrite(EveChipSelect_PIN, LOW);
+  digitalWrite(_eveChipSelectPin, LOW);
 }
+
 // Disable SPI by deasserting the chip select line
 void HAL_SPI_Disable(void)
 {
-  digitalWrite(EveChipSelect_PIN, HIGH);
+  digitalWrite(_eveChipSelectPin, HIGH);
   SPI.endTransaction();
 }
 
 void HAL_Eve_Reset_HW(void)
 {
   // Reset Eve
-  digitalWrite(EvePDN_PIN, 0);                    // Set the Eve PDN pin low
+  digitalWrite(_evePdnPin, 0);                    // Set the Eve PDN pin low
   HAL_Delay(50);                             // delay
-  digitalWrite(EvePDN_PIN, 1);                    // Set the Eve PDN pin high
+  digitalWrite(_evePdnPin, 1);                    // Set the Eve PDN pin high
   HAL_Delay(100);                            // delay
 }
 

@@ -38,9 +38,9 @@
 #include <stdio.h>
 #include <stdint.h>              // Find integer types like "uint8_t"  
 #include <stdbool.h>			 // for true/false
-#include "eve/Eve2_81x.h"            // Header for this file with prototypes, defines, and typedefs
-#include "eve/MatrixEve2Conf.h"      // Header for display selection 
-#include "eve/hw_api.h"				 // for spi abstraction 
+#include "Eve2_81x.h"            // Header for this file with prototypes, defines, and typedefs
+#include "MatrixEve2Conf.h"      // Header for display selection 
+#include "hw_api.h"				 // for spi abstraction 
 
 #define WorkBuffSz 512
 #define Log printf

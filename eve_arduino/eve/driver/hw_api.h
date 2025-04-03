@@ -7,6 +7,9 @@ extern "C" {
 #include <stdint.h>              
 #include <stdbool.h>            
 
+// Initialize EVE hardware with specified pins
+void HAL_Eve_Init(uint8_t chipSelectPin, uint8_t pdnPin);
+
 void HAL_SPI_Enable(void);
 void HAL_SPI_Disable(void);
 uint8_t HAL_SPI_Write(uint8_t data);
