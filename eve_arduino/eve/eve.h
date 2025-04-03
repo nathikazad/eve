@@ -73,5 +73,4 @@ void drawRectangle(int x, int y, int width, int height, Color color);
 bool init_touch_interrupts(int interrupt_pin);
 void read_touch_coordinates();
 void touchHandlerTask(void* parameter);
-void display_current_screen();
 #endif

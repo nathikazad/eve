@@ -39,6 +39,7 @@ void setup() {
     return;
   }
   init_eve(EvePDN_PIN, EveChipSelect_PIN, SCK, MISO, MOSI, EveAudioEnable_PIN, EveInterrupt_PIN, handleTouch);
+  display_current_screen();
 }
 
 void loop() {

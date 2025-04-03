@@ -40,7 +40,6 @@ bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, i
   init_touch_interrupts(interrupt_pin, touch_callback);
   
   Serial.println("Display initialized with touch interrupts configured");
-  display_current_screen();
   return true;
 }
 
