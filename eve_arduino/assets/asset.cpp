@@ -1,8 +1,21 @@
+// asset.cpp
+// This file contains the functions for loading assets into the EVE display and configuring the EVE display
+
 #include "../config.h"
 #include "../eve/Eve2_81x.h"
 #include "asset.h"
 #include "FS.h"
 #include "LittleFS.h"
+
+// Touch interrupt flag
+volatile bool touch_interrupt = false;
+int16_t last_touch_x = -32768;
+int16_t last_touch_y = -32768;
+
+// Interrupt handler function
+void IRAM_ATTR handle_touch_interrupt() {
+  touch_interrupt = true;
+}
 
 bool init_eve() {
   pinMode(EvePDN_PIN, OUTPUT);
@@ -22,8 +35,42 @@ bool init_eve() {
   
   // Initialize EVE display
   FT81x_Init(DISPLAY_43, BOARD_EVE2, TOUCH_TPR);
+
+  // Configure touch interrupts
+  init_eve_interrupts();
   
-  Serial.println("Display initialized");
+  Serial.println("Display initialized with touch interrupts configured");
+  return true;
+}
+
+bool init_eve_interrupts() {
+
+  // 1. Enable the TOUCH interrupt flag in the mask// Configure touch mode to ensure touch is active
+  wr8(RAM_REG + REG_TOUCH_MODE, 3); // Continuous mode
+  
+  // Configure interrupt for touch
+  // Clear any pending interrupts
+  rd8(RAM_REG + REG_INT_FLAGS);
+  
+  // Set touch interrupt mask
+  wr8(RAM_REG + REG_INT_MASK, 0x02);  // Enable TOUCH flag only (bit 1)
+  
+  // Enable global interrupt
+  wr8(RAM_REG + REG_INT_EN, 0x01);    // Enable global interrupt
+  
+  // Configure INT_N as push-pull output
+  uint16_t gpiox = rd16(RAM_REG + REG_GPIOX);
+  
+  // Configure INT_N as push-pull output (set bit 7)
+  gpiox |= (1 << 7);
+  wr16(RAM_REG + REG_GPIOX, gpiox);
+  
+  // Setup hardware interrupt pin
+  pinMode(EveInterrupt_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(EveInterrupt_PIN), handle_touch_interrupt, CHANGE);
+  Serial.print("Attached EVE interrupt to pin ");
+  Serial.println(EveInterrupt_PIN);
+  
   return true;
 }
 
@@ -92,6 +139,19 @@ bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
     Serial.printf("Error: Only read %u of %u bytes\n", bytesRead, fileSize);
     return false;
   }
+}
+
+// Function to read and store touch coordinates
+void read_touch_coordinates() {
+  // Read touch coordinates
+  uint32_t touchXY = rd32(RAM_REG + REG_TOUCH_SCREEN_XY);
+  last_touch_x = touchXY >> 16;
+  last_touch_y = touchXY & 0xFFFF;
+  
+  Serial.print("Touch X: ");
+  Serial.print(last_touch_x);
+  Serial.print(", Y: ");
+  Serial.println(last_touch_y);
 }
 
 void get_color_rgb(Color color, uint8_t* r, uint8_t* g, uint8_t* b) {

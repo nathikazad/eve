@@ -4,6 +4,7 @@
 #define EveChipSelect_PIN     D7  // PB1
 #define EveAudioEnable_PIN    D1  // PD1
 #define EvePDN_PIN            D6  // PB0
+#define EveInterrupt_PIN      D5  // PC5
 
 #define SCK D8
 #define MISO D9

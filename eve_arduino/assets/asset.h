@@ -51,6 +51,10 @@ public:
 
 extern const Font fonts[];
 extern const Image images[];
+extern volatile bool touch_interrupt;
+extern int16_t last_touch_x;
+extern int16_t last_touch_y;
+
 
 bool init_eve();
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr);
@@ -62,4 +66,6 @@ void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
 void display_slider(int x, int y, int width, int height, int value, int range);
 void set_color(Color color);
 void drawRectangle(int x, int y, int width, int height, Color color);
+bool init_eve_interrupts();
+void read_touch_coordinates();
 #endif

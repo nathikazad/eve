@@ -1,3 +1,4 @@
+// eve_arduino.ino
 #include "Arduino.h"
 #include <SPI.h>
 #include "eve/MatrixEve2Conf.h"
@@ -71,41 +72,26 @@ void setup() {
 }
 
 void loop() {
-  // Check touch coordinates every 100ms
-  unsigned long currentMillis = millis();
-  if (currentMillis - lastTouchCheck >= 100) {
-    lastTouchCheck = currentMillis;
+  // Check if touch interrupt was triggered
+  if (touch_interrupt) {
+    // Clear the flag
+    touch_interrupt = false;
     
-    // Read touch coordinates
-    uint32_t touchXY = rd32(RAM_REG + REG_TOUCH_SCREEN_XY);
-    int16_t touchX = touchXY >> 16;
-    int16_t touchY = touchXY & 0xFFFF;
-
-    // If coordinates have changed, print them
-    if (touchX == -32768 && touchX == -32768) {
-      // Touch released
-      if (lastX != -32768 && lastY != -32768) {
-        Serial.println("Touch released");
-        lastX = -32768;
-        lastY = -32768;
-        current_screen++;
-        if (current_screen > 6) {
-          current_screen = 0;
-        }
-        display_current_screen();
-      }
-    } else if (touchX != lastX || touchY != lastY) {
-      Serial.print("Touch X: ");
-      Serial.print(touchX);
-      Serial.print(", Y: ");
-      Serial.println(touchY);
-      // Update last known position
-      lastX = touchX;
-      lastY = touchY;
-      
+    // Read and clear interrupt flags
+    uint8_t flags = rd8(RAM_REG + REG_INT_FLAGS);
+    Serial.printf("Touch interrupt detected! Flags: 0x%02X\n", flags);
+    
+    // Read touch coordinates and update last_touch_x/y
+    read_touch_coordinates();
+    
+    // Advance to next screen
+    current_screen++;
+    if (current_screen > 6) {
+      current_screen = 0;
     }
-      
     
+    // Display the new screen
+    display_current_screen();
   }
 }
 
