@@ -25,7 +25,7 @@ void IRAM_ATTR handle_touch_interrupt() {
   }
 }
 
-bool init_touch_interrupts() {
+bool init_touch_interrupts(int interrupt_pin) {
 
   // 1. Enable the TOUCH interrupt flag in the mask// Configure touch mode to ensure touch is active
   wr8(RAM_REG + REG_TOUCH_MODE, 3); // Continuous mode
@@ -48,10 +48,10 @@ bool init_touch_interrupts() {
   wr16(RAM_REG + REG_GPIOX, gpiox);
   
   // Setup hardware interrupt pin
-  pinMode(EveInterrupt_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(EveInterrupt_PIN), handle_touch_interrupt, CHANGE);
+  pinMode(interrupt_pin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interrupt_pin), handle_touch_interrupt, CHANGE);
   Serial.print("Attached EVE interrupt to pin ");
-  Serial.println(EveInterrupt_PIN);
+  Serial.println(interrupt_pin);
 
     // Create touch handling task
   xTaskCreate(

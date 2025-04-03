@@ -57,7 +57,7 @@ extern int16_t last_touch_y;
 extern TaskHandle_t touchTaskHandle;
 
 
-bool init_eve();
+bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin);
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr);
 void clear_screen(Color color);
 void flush_screen_commands();
@@ -67,7 +67,7 @@ void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
 void display_slider(int x, int y, int width, int height, int value, int range);
 void set_color(Color color);
 void drawRectangle(int x, int y, int width, int height, Color color);
-bool init_touch_interrupts();
+bool init_touch_interrupts(int interrupt_pin);
 void read_touch_coordinates();
 void touchHandlerTask(void* parameter);
 void display_current_screen();

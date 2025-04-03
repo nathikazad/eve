@@ -3,6 +3,14 @@
 #include "eve/init.cpp"
 #include "LittleFS.h"
 
+#define EveChipSelect_PIN     D7  // PB1
+#define EveAudioEnable_PIN    D1  // PD1
+#define EvePDN_PIN            D6  // PB0
+#define EveInterrupt_PIN      D5  // PC5
+
+#define SCK D8
+#define MISO D9
+#define MOSI D10
 
 void setup() {
   // Initialize serial for debugging
@@ -16,7 +24,7 @@ void setup() {
     Serial.println("LittleFS mount failed");
     return;
   }
-  init_eve();
+  init_eve(EvePDN_PIN, EveChipSelect_PIN, SCK, MISO, MOSI, EveAudioEnable_PIN, EveInterrupt_PIN);
 }
 
 void loop() {

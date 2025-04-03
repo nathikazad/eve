@@ -5,7 +5,6 @@
 #include "LittleFS.h"
 #include <FreeRTOS.h>
 
-#include "../config.h"
 #include "driver/Eve2_81x.c"
 #include "driver/hal.cpp"  
 #include "eve.h"
@@ -14,23 +13,23 @@
 #include "widgets.cpp"
 #include "touch.cpp"
 
-bool init_eve() {
-  pinMode(EvePDN_PIN, OUTPUT);
-  digitalWrite(EvePDN_PIN, LOW);           // Reset condition
+bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin) {
+  pinMode(pd_pin, OUTPUT);
+  digitalWrite(pd_pin, LOW);           // Reset condition
   delay(100);
-  digitalWrite(EvePDN_PIN, HIGH);          // Release reset
+  digitalWrite(pd_pin, HIGH);          // Release reset
   delay(100);
   
-  pinMode(EveChipSelect_PIN, OUTPUT);
-  digitalWrite(EveChipSelect_PIN, HIGH);   // Deselect EVE
+  pinMode(cs_pin, OUTPUT);
+  digitalWrite(cs_pin, HIGH);   // Deselect EVE
   
-  pinMode(EveAudioEnable_PIN, OUTPUT);
-  digitalWrite(EveAudioEnable_PIN, LOW);   // Disable audio
+  pinMode(audio_pin, OUTPUT);
+  digitalWrite(audio_pin, LOW);   // Disable audio
   
   // Initialize SPI
-  SPI.begin(SCK, MISO, MOSI, EveChipSelect_PIN);
+  SPI.begin(sck_pin, miso_pin, mosi_pin, cs_pin);
 
-  HAL_Eve_Init(EveChipSelect_PIN, EvePDN_PIN);
+  HAL_Eve_Init(cs_pin, pd_pin);
   
   // Initialize EVE display
   FT81x_Init(DISPLAY_43, BOARD_EVE2, TOUCH_TPR);
@@ -39,7 +38,7 @@ bool init_eve() {
   load_assets();  
   int asset_load_end = millis();
   Serial.printf("Asset load time: %d ms\n", asset_load_end - asset_load_start);
-  init_touch_interrupts();
+  init_touch_interrupts(interrupt_pin);
   
   Serial.println("Display initialized with touch interrupts configured");
   display_current_screen();
