@@ -302,6 +302,90 @@
             "memoryAddress": 144428,
             "memoryLoaded": true,
             "sourcePath": "resources/BTN_SM_Next_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Wifi_onmdpi",
+            "displayName": "BTN_Wifi.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 121268,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Wifi_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Home_onmdpi",
+            "displayName": "BTN_Home.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 117036,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Home_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Temp_onmdpi",
+            "displayName": "BTN_Temp.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 125500,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Temp_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Bluetooth_onmdpi",
+            "displayName": "BTN_Bluetooth.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 129640,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Bluetooth_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Lang_onmdpi",
+            "displayName": "BTN_Lang.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 133872,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Lang_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Submit_onmdpi",
+            "displayName": "BTN_Submit_onmdpi.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 148660,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Submit_onmdpi.png"
+        },
+        {
+            "converter": "Image",
+            "dataCompressed": true,
+            "dataStorage": "Embedded",
+            "destName": "images/BTN_Factory_onmdpi",
+            "displayName": "BTN_Factory_onmdpi.png",
+            "imageFormat": 0,
+            "loadMultipleParts": false,
+            "memoryAddress": 152892,
+            "memoryLoaded": true,
+            "sourcePath": "resources/BTN_Factory_onmdpi.png"
         }
     ],
     "coprocessor": [
