@@ -5,7 +5,6 @@ void display_current_screen(uint8_t r, uint8_t g, uint8_t b) {
   // Serial.println("Displaying current screen");
   // switch (current_screen) {
   //   case 0:
-  //     load_coolcuremain();
   //     Serial.println("Displaying splash screen");
   //     display_splash_screen();
   //     break;

@@ -19,13 +19,20 @@ const Image images[] = {
     {87868, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_PAUSE
     {108664, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_RETURN
     {112896, 4140, 46, 45, IMAGE_FORMAT_ARGB1555}, // BTN_START
-    {117036, 1650, 240, 55, IMAGE_FORMAT_L1}, // CANNATROL
-    {160000, 42280, 302, 70, IMAGE_FORMAT_ARGB1555}, // COOLCUREMAIN
+    {216348, 1650, 240, 55, IMAGE_FORMAT_L1}, // CANNATROL
+    {218000, 42280, 302, 70, IMAGE_FORMAT_ARGB1555}, // COOLCUREMAIN
     {140340, 3280, 40, 41, IMAGE_FORMAT_ARGB1555}, // GEARS
     {143620, 806, 208, 31, IMAGE_FORMAT_L1}, // COOLCUREBOTTOM
     {92100, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_RESET
     {144428, 800, 20, 20, IMAGE_FORMAT_ARGB1555}, // BTN_NEXT
-    {150000, 80000, 200, 200, IMAGE_FORMAT_ARGB1555}, // WHEEL
+    {121268, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_WIFI
+    {117036, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_HOME
+    {125500, 4140, 46, 45, IMAGE_FORMAT_ARGB1555}, // BTN_TEMP
+    {129640, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_BLUETOOTH
+    {133872, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_LANG
+    {148660, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_SUBMIT_ONMDPI
+    {152892, 4140, 46, 45, IMAGE_FORMAT_ARGB1555}, // BTN_FACTORY_ONMDPI
+    {160000, 80000, 200, 200, IMAGE_FORMAT_ARGB1555}, // WHEEL
 };
 
 
@@ -47,17 +54,22 @@ void load_assets() {
     load_asset_from_littlefs("/images/BTN_Pause.raw", 87868);
     load_asset_from_littlefs("/images/BTN_Return.raw", 108664);
     load_asset_from_littlefs("/images/BTN_Start.raw", 112896);
-    load_asset_from_littlefs("/images/Cannatrol.raw", 117036);
+    load_asset_from_littlefs("/images/Cannatrol.raw", 216348);
+    load_asset_from_littlefs("/images/CoolCureMain.raw", 218000);
     load_asset_from_littlefs("/images/Gears.raw", 140340);
     load_asset_from_littlefs("/images/CoolCureBottom.raw", 143620);
     load_asset_from_littlefs("/images/BTN_Reset_onmdpi.raw", 92100);
     load_asset_from_littlefs("/images/BTN_SM_Next_onmdpi.raw", 144428);
+    load_asset_from_littlefs("/images/BTN_Wifi_onmdpi.raw", 121268);
+    load_asset_from_littlefs("/images/BTN_Home_onmdpi.raw", 117036);
+    load_asset_from_littlefs("/images/BTN_Temp_onmdpi.raw", 125500);
+    load_asset_from_littlefs("/images/BTN_Bluetooth_onmdpi.raw", 129640);
+    load_asset_from_littlefs("/images/BTN_Lang_onmdpi.raw", 133872);
+    load_asset_from_littlefs("/images/BTN_Submit_onmdpi.raw", 148660);
+    load_asset_from_littlefs("/images/BTN_Factory_onmdpi.raw", 152892);
 }
+
 
 void load_wheel() {
-    load_asset_from_littlefs("/images/wheel.raw", 150000);
-}
-
-void load_coolcuremain() {
-    load_asset_from_littlefs("/images/CoolCureMain.raw", 160000);
+    load_asset_from_littlefs("/images/wheel.raw", 160000);
 }

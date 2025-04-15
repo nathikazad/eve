@@ -28,9 +28,15 @@ enum Images {
     IMAGE_BTN_RESET,
     IMAGE_BTN_NEXT,
     IMAGE_WHEEL,
+    IMAGE_BTN_WIFI,
+    IMAGE_BTN_HOME,
+    IMAGE_BTN_TEMP,
+    IMAGE_BTN_BLUETOOTH,
+    IMAGE_BTN_LANG,
+    IMAGE_BTN_SUBMIT_ONMDPI,
+    IMAGE_BTN_FACTORY_ONMDPI,
 };
 
 void load_assets();
 void load_wheel();
-void load_coolcuremain();
 #endif
