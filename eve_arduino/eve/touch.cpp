@@ -75,12 +75,14 @@ void touchHandlerTask(void* parameter) {
     
     if (notification > 0) {
       // Read and clear interrupt flags
-      uint8_t flags = rd8(RAM_REG + REG_INT_FLAGS);
-      Serial.printf("Touch interrupt detected! Flags: 0x%02X\n", flags);
-      
-      // Read touch coordinates and update last_touch_x/y
-      read_touch_coordinates();
-      
+      // if (xSemaphoreTake(spiMutex, portMAX_DELAY) == pdTRUE) {
+        uint8_t flags = rd8(RAM_REG + REG_INT_FLAGS);
+        // Serial.printf("Touch interrupt detected! Flags: 0x%02X\n", flags);
+        
+        // Read touch coordinates and update last_touch_x/y
+        read_touch_coordinates();
+      //   xSemaphoreGive(spiMutex);
+      // }
       // Call the callback function with touch coordinates if it exists
       if (touch_callback != NULL) {
         touch_callback(last_touch_x, last_touch_y);
@@ -97,8 +99,8 @@ void read_touch_coordinates() {
   last_touch_x = touchXY >> 16;
   last_touch_y = touchXY & 0xFFFF;
   
-  Serial.print("Touch X: ");
-  Serial.print(last_touch_x);
-  Serial.print(", Y: ");
-  Serial.println(last_touch_y);
+  // Serial.print("Touch X: ");
+  // Serial.print(last_touch_x);
+  // Serial.print(", Y: ");
+  // Serial.println(last_touch_y);
 }

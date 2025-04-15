@@ -1,6 +1,7 @@
 #include "driver/Eve2_81x.h"
 #include "eve.h"
 #include "assets.h"
+#include <math.h>
 
 void get_color_rgb(Color color, uint8_t* r, uint8_t* g, uint8_t* b) {
   switch (color) {
@@ -64,6 +65,14 @@ void set_color(Color color) {
   Send_CMD(COLOR_RGB(r, g, b));
 }
 
+void draw_rect(int x, int y, int width, int height, uint8_t r, uint8_t g, uint8_t b) {
+  Send_CMD(COLOR_RGB(r, g, b));
+  Send_CMD(BEGIN(RECTS));
+  Send_CMD(VERTEX2F(x*16, y*16));
+  Send_CMD(VERTEX2F(x*16 + width*16, y*16 + height*16));
+  Send_CMD(END());
+}
+
 void display_image(int image_index, int x, int y) {
   Image image = images[image_index];
   uint16_t format_value = ARGB1555;
@@ -110,4 +119,38 @@ void drawRectangle(int x, int y, int width, int height, Color color) {
     Cmd_FGcolor(0xFFFFFF);
   }
   Cmd_Button(x, y, width, height, 27, 0, " ");
+}
+
+void draw_circle(int x_center, int y_center, int radius, Color color) {
+  // Set the color for the circle border
+  uint8_t r, g, b;
+  get_color_rgb(color, &r, &g, &b);
+  Send_CMD(COLOR_RGB(r, g, b));
+  
+  // Set line width for the border (adjust as needed)
+  Send_CMD(LINE_WIDTH(16));  // Line width is in 1/16 pixel units, so 16 = 1 pixel
+  
+  // Begin drawing a line strip (connected lines)
+  Send_CMD(BEGIN(LINE_STRIP));
+  
+  // Calculate points around the circle
+  const int num_segments = 60;  // More segments = smoother circle
+  float theta = 0;
+  float step = 2.0f * 3.14159f / num_segments;  // Full circle in radians
+  
+  // Draw the first point to connect back to the end
+  int x = x_center + radius * cos(0);
+  int y = y_center + radius * sin(0);
+  Send_CMD(VERTEX2F(x * 16, y * 16));  // Coordinates multiplied by 16
+  
+  // Draw the circle by connecting points around the circumference
+  for (int i = 0; i <= num_segments; i++) {
+    theta = i * step;
+    x = x_center + radius * cos(theta);
+    y = y_center + radius * sin(theta);
+    Send_CMD(VERTEX2F(x * 16, y * 16));  // Coordinates multiplied by 16
+  }
+  
+  // End the primitive
+  Send_CMD(END());
 }

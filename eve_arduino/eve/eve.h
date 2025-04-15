@@ -2,6 +2,11 @@
 #define EVE_H
 
 #include <Arduino.h> 
+#include <FreeRTOS.h>
+#include <semphr.h>
+
+// Add EVE display list macros that aren't in Eve2_81x.h
+#define LINE_WIDTH(width) ((14UL<<24)|(((width)&4095UL)<<0))
 
 enum Color {
     COLOR_WHITE,
@@ -58,6 +63,7 @@ extern volatile bool touch_interrupt;
 extern int16_t last_touch_x;
 extern int16_t last_touch_y;
 extern TaskHandle_t touchTaskHandle;
+extern SemaphoreHandle_t spiMutex;  // SPI mutex for thread safety
 
 
 bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin);
@@ -73,4 +79,6 @@ void drawRectangle(int x, int y, int width, int height, Color color);
 bool init_touch_interrupts(int interrupt_pin);
 void read_touch_coordinates();
 void touchHandlerTask(void* parameter);
+void draw_rect(int x, int y, int width, int height, uint8_t r, uint8_t g, uint8_t b);
+void draw_circle(int x_center, int y_center, int radius, Color color);
 #endif

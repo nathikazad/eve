@@ -27,7 +27,10 @@ enum Images {
     IMAGE_COOLCUREBOTTOM,
     IMAGE_BTN_RESET,
     IMAGE_BTN_NEXT,
+    IMAGE_WHEEL,
 };
 
 void load_assets();
+void load_wheel();
+void load_coolcuremain();
 #endif

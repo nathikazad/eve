@@ -1,37 +1,50 @@
 #include "screens.h"
 
 int current_screen = 0;
-void display_current_screen() {
-  switch (current_screen) {
-    case 0:
-      Serial.println("Displaying splash screen");
-      display_splash_screen();
-      break;
-    case 1:
-      Serial.println("Displaying store screen");
-      display_main_screen(68.0, 54.0, 57, "STORE");
-      break;
-    case 2:
-      Serial.println("Displaying dry screen");
-      display_main_screen(68.0, 54.0, 57, "DRY");
-      break;
-    case 3:
-      Serial.println("Displaying cure screen");
-      display_main_screen(68.0, 54.0, 57, "CURE");
-      break;
-    case 4:
-      Serial.println("Displaying store sliders");
-      display_sliders("STORE");
-      break;
-    case 5:
-      Serial.println("Displaying dry sliders");
-      display_sliders("DRY");
-      break;
-    case 6:
-      Serial.println("Displaying cure sliders");
-      display_sliders("CURE");  
-      break;
-  }
+void display_current_screen(uint8_t r, uint8_t g, uint8_t b) {
+  // Serial.println("Displaying current screen");
+  // switch (current_screen) {
+  //   case 0:
+  //     load_coolcuremain();
+  //     Serial.println("Displaying splash screen");
+  //     display_splash_screen();
+  //     break;
+  //   case 1:
+  //     Serial.println("Displaying store screen");
+  //     display_main_screen(68.0, 54.0, 57, "STORE");
+  //     break;
+  //   case 2:
+  //     Serial.println("Displaying dry screen");
+  //     display_main_screen(68.0, 54.0, 57, "DRY");
+  //     break;
+  //   case 3:
+  //     Serial.println("Displaying cure screen");
+  //     display_main_screen(68.0, 54.0, 57, "CURE");
+  //     break;
+  //   case 4:
+  //     Serial.println("Displaying store sliders");
+  //     display_sliders("STORE");
+  //     break;
+  //   case 5:
+  //     Serial.println("Displaying dry sliders");
+  //     display_sliders("DRY");
+  //     break;
+  //   case 6:
+  //     Serial.println("Displaying cure sliders");
+  //     display_sliders("CURE");  
+  //     break;
+  //   case 7:
+      Serial.println("Displaying wheel");
+      display_wheel_screen(r, g, b);
+  //     break;
+  // }
+}
+
+void display_wheel_screen(uint8_t r, uint8_t g, uint8_t b) {
+  clear_screen(COLOR_GRAY);
+  display_image(IMAGE_WHEEL, 25, 25);
+  draw_rect(331, 112, 133, 80, r, g, b);
+  flush_screen_commands();
 }
 
 void display_main_screen(float temperature, float dew_point, int humidity, char* state_text) {

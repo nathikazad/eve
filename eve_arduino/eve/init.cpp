@@ -4,6 +4,7 @@
 #include "FS.h"
 #include "LittleFS.h"
 #include <FreeRTOS.h>
+#include <semphr.h>
 
 #include "driver/Eve2_81x.c"
 #include "driver/hal.cpp"  
@@ -12,7 +13,20 @@
 #include "widgets.cpp"
 #include "touch.cpp"
 
+// Create SPI mutex
+SemaphoreHandle_t spiMutex = NULL;
+const int bufferSize = 1024*5;
+uint8_t buffer[bufferSize];
+
+
 bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, int audio_pin, int interrupt_pin, TouchCallback touch_callback) {
+  // Initialize SPI mutex
+  spiMutex = xSemaphoreCreateMutex();
+  if (spiMutex == NULL) {
+    Serial.println("Failed to create SPI mutex");
+    return false;
+  }
+  
   pinMode(pd_pin, OUTPUT);
   digitalWrite(pd_pin, LOW);           // Reset condition
   delay(100);
@@ -32,6 +46,7 @@ bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, i
   
   // Initialize EVE display
   FT81x_Init(DISPLAY_43, BOARD_EVE2, TOUCH_TPR);
+  // Cmd_Calibrate(0);
 
   int asset_load_start = millis();
   load_assets();  
@@ -44,9 +59,9 @@ bool init_eve(int pd_pin, int cs_pin, int sck_pin, int miso_pin, int mosi_pin, i
 }
 
 bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
-  // Buffer for reading the file in chunks
-  const size_t bufferSize = 1024*5; 
-  uint8_t buffer[bufferSize];
+  // Buffer for reading the file in chunks  
+  // const size_t bufferSize = 1024*5; 
+  // uint8_t buffer[bufferSize];
   Serial.printf("File: %s, Address: %u, ", filename, ram_g_addr);
   
   if (!LittleFS.exists(filename)) {
@@ -87,7 +102,10 @@ bool load_asset_from_littlefs(const char* filename, uint32_t ram_g_addr) {
     }
     
     // Write this chunk to EVE RAM_G
-    WriteBlockRAM(currentAddr, buffer, chunkSize);
+    // if (xSemaphoreTake(spiMutex, portMAX_DELAY) == pdTRUE) {
+      WriteBlockRAM(currentAddr, buffer, chunkSize);
+    //   xSemaphoreGive(spiMutex);
+    // }
     
     // Update counters
     bytesRead += chunkSize;

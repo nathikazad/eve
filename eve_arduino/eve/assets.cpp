@@ -25,6 +25,7 @@ const Image images[] = {
     {143620, 806, 208, 31, IMAGE_FORMAT_L1}, // COOLCUREBOTTOM
     {92100, 4232, 46, 46, IMAGE_FORMAT_ARGB1555}, // BTN_RESET
     {144428, 800, 20, 20, IMAGE_FORMAT_ARGB1555}, // BTN_NEXT
+    {150000, 80000, 200, 200, IMAGE_FORMAT_ARGB1555}, // WHEEL
 };
 
 
@@ -47,9 +48,16 @@ void load_assets() {
     load_asset_from_littlefs("/images/BTN_Return.raw", 108664);
     load_asset_from_littlefs("/images/BTN_Start.raw", 112896);
     load_asset_from_littlefs("/images/Cannatrol.raw", 117036);
-    load_asset_from_littlefs("/images/CoolCureMain.raw", 160000);
     load_asset_from_littlefs("/images/Gears.raw", 140340);
     load_asset_from_littlefs("/images/CoolCureBottom.raw", 143620);
     load_asset_from_littlefs("/images/BTN_Reset_onmdpi.raw", 92100);
     load_asset_from_littlefs("/images/BTN_SM_Next_onmdpi.raw", 144428);
+}
+
+void load_wheel() {
+    load_asset_from_littlefs("/images/wheel.raw", 150000);
+}
+
+void load_coolcuremain() {
+    load_asset_from_littlefs("/images/CoolCureMain.raw", 160000);
 }

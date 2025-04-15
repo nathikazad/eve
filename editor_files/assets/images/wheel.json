@@ -1,0 +1,12 @@
+{
+  "eab version": "2.12.0",
+  "input name": "wheel.png",
+  "output name": "wheel.raw",
+  "output size": 80000,
+  "type": "bitmap",
+  "format": "ARGB1555",
+  "compressed": "no",
+  "width": 200,
+  "height": 200,
+  "stride": 400
+}
