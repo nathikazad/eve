@@ -192,11 +192,11 @@ void display_sliders(char* state_text) {
   }
   
   if (strcmp(state_text, "DRY") == 0 || strcmp(state_text, "CURE") == 0) {
-    drawRectangle(400, 189, 19, 20, COLOR_WHITE);
-    drawRectangle(401, 191, 15, 15, COLOR_GRAY);
+    draw_rectangle(400, 189, 19, 20, COLOR_WHITE);
+    draw_rectangle(401, 191, 15, 15, COLOR_GRAY);
     display_text(FONT_55W_18PX_A, "Slope", 426, 192, COLOR_BLACK);
-    drawRectangle(400, 224, 19, 20, COLOR_WHITE);
-    // drawRectangle(401, 226, 15, 15, COLOR_GRAY);
+    draw_rectangle(400, 224, 19, 20, COLOR_WHITE);
+    // draw_rectangle(401, 226, 15, 15, COLOR_GRAY);
     display_text(FONT_55W_18PX_A, "Step", 426, 227, COLOR_BLACK);
   }
   

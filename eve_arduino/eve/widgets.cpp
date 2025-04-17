@@ -111,7 +111,7 @@ void display_slider(int x, int y, int width, int height, int value, int range) {
   Cmd_Slider(x, y, width, height, 0, value, range);
 }
 
-void drawRectangle(int x, int y, int width, int height, Color color) {
+void draw_rectangle(int x, int y, int width, int height, Color color) {
     // Slope and Step buttons
   if (color == COLOR_GRAY) {
     Cmd_FGcolor(0xB1B1B1);

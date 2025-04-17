@@ -75,7 +75,7 @@ void display_text(int font_index, const char* text, int x, int y, Color color);
 void Cmd_SetFont2(uint32_t font, uint32_t ptr, uint32_t firstchar);
 void display_slider(int x, int y, int width, int height, int value, int range);
 void set_color(Color color);
-void drawRectangle(int x, int y, int width, int height, Color color);
+void draw_rectangle(int x, int y, int width, int height, Color color);
 bool init_touch_interrupts(int interrupt_pin);
 void read_touch_coordinates();
 void touchHandlerTask(void* parameter);
